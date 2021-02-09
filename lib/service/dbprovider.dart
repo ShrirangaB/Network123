@@ -63,14 +63,6 @@ class DBProvider {
               '$suite TEXT,'
               '$city TEXT,'
               '$zip INTEGER)');
-
-      await db.execute('CREATE TABLE $tableGeo($colId2 INTEGER,$lat INTEGER, '
-          '$lng INTEGER)');
-
-      await db
-          .execute('CREATE TABLE $tableCompany($colId3 INTEGER,$cName TEXT, '
-              '$cPhrase TEXT,'
-              '$bs TEXT,');
     });
   }
 
@@ -84,7 +76,8 @@ class DBProvider {
 
   Future<List<Employee>> getAllDetails() async {
     final db = await database;
-    final res = await db.rawQuery("SELECT * FROM $tableName");
+    final res = await db.rawQuery(
+        "SELECT $colId, $colUserName,$colPhone FROM $tableName INNER JOIN $tableAddress ON $tableName.$colId = $tableAddress.$colId1");
 
     List<Employee> list =
         res.isNotEmpty ? res.map((c) => Employee.fromJson(c)).toList() : [];
